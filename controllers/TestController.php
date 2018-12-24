@@ -8,6 +8,8 @@ use app\models\YjUserType;
 use yii\data\Pagination;
 
 use app\models\JobCity;
+// use app\db\conditions\AllNotNullCondition;
+// use app\db\conditions\AllGreaterCondition;
 
 header("Content-type:text/html;charset=utf-8");
 class TestController extends Controller{
@@ -59,56 +61,26 @@ class TestController extends Controller{
 	}
 
 	public function actionTest(){
-		// $gender=\Yii::$app->request->get('gender');
-		// $is_del=\Yii::$app->request->get('is_del');
-		// // $sql="select * from web_test where gender=:gender and is_del=:is_del";
-		// // $result=YjUser::findBySql($sql,array(':gender'=>$gender,':is_del'=>$is_del))->all();
-		// // $result=YjUser::find()->where(array('like','name','少'))->all();
-		// // $result=YjUser::findAll(array(1,2,3));
-		// // $result=YjUser::find()->asArray()->where(array('like','name','少'))->one();
-		// foreach(YjUser::find()->batch(50) as $v){
-		// 	$result[]=$v;
+		$model=YjUser::find();
+		$query=$model->select('id')->orderBy('id desc');
+		// $where=[
+		// 	'and',
+		// 	['not',['type'=>null]],
+		// 	['not',['one_type'=>null]],
+		// 	['not',['name'=>null]]
+		// ];
+		// $where=(new AllNotNullCondition(['type','name','one_type']));
+		// $where=(new AllGreaterCondition(['type','name','one_type'],1));
+		// $where=(['ALL>',['type','name','one_type'],1111]);
+		$where=(['ALL NOT NULL',['type','name','one_type']]);
+		$list=$query->where($where)->asArray()->all();
+		// foreach($query->each() as $v){
+		// 	echo "<pre>";
+		// 	var_dump($v->toArray());
+		// 	echo "</pre>";
 		// }
-		// dump($result);
-		// return $this->render('test',compact('result'));
-
-		// $model=new JobCity();
-		// $model->pid=0;
-		// $model->name='hahaha';
-		// $model->note='22';
-		// $model->createtime=1000001;
-		// $add=$model->save();
-		// if(!$add){
-		// 	var_dump($model->getErrors());
-		// }else{
-		// 	echo $model->attributes['id'];
-		// }
-		// $info=JobCity::findOne(88);
-	 //    $info->name='aaa';
-	 //    // $info->note=1;
-	 //    $edit=$info->update();
-	 //    // dump($edit);
-	 //    if($edit===false){
-	 //        dump($info->getErrors());
-	 //    }
-		// $set=JobCity::updateAllCounters(array('pid'=>-1,'note'=>2),array('id'=>88));
-		// dump($set);
-		// $cate=YjUserType::findOne(2);
-		// // $list=$cate->hasMany(YjUser::className(),array('type'=>'id'))->where(array('like','name','导'))->all();
-		// // $lists=$cate->getUsers();
-		// $lists=$cate->users;
-		// dump($lists);
-
-		// $user=YjUser::findOne();
-  //   	// $info=$user->hasOne('app\models\YjUserType',array('id'=>'type'))->asArray()->one();
-  //   	$info=$user->hasOne(YjUserType::className(),array('id'=>'type'))->asArray()->one();
-  //   	dump($info);
-		// $user=YjUser::findOne(1);
-  //   	$info=$user->userType;
-  //   	dump($info);
-  //   	die;
-
-		$cate=YjUser::find()->with('UserType')->asArray()->all();
-		dump($cate);
+		echo $model->createCommand()->getRawSql();
+		dump($list);
 	}
+
 }

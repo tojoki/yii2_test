@@ -11,4 +11,14 @@ return [
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
+    'queryBuilder' => [
+        'expressionBuilders' => [
+            'app\db\conditions\AllNotNullCondition' => 'app\db\conditions\AllNotNullConditionBuilder',
+            'app\db\conditions\AllGreaterCondition' => 'app\db\conditions\AllGreaterConditionBuilder',
+        ],
+        'conditionClasses' => [
+	        'ALL>' => 'app\db\conditions\AllGreaterCondition',
+	        'ALL NOT NULL'=>'app\db\conditions\AllNotNullCondition'
+	    ],
+    ],
 ];
