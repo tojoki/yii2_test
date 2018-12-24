@@ -6,7 +6,7 @@ use yii\base\InvalidConfigException;
 
 class HelpComponent extends Component {
     public function hello(){
-        echo "hello world test";
+        echo "hello world test111";
     }
 } 
 ?>
